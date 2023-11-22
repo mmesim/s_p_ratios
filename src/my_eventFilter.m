@@ -1,8 +1,9 @@
-function  [filtDataZ,filtDataE,filtDataN]=my_eventFilter(dataZ,dataE,dataN)
+function  [filtDataZ,filtDataE,filtDataN]=my_eventFilter(dataZ,dataE,dataN,min_sp)
 
 %% First find events that are recorded on three stations
 ABC_inter=intersect(intersect(vertcat(dataZ.ID),vertcat(dataE.ID),'stable'),vertcat(dataN.ID),'stable');
 
+if ~isempty(ABC_inter)
 %Now filter them
 %Z
 [~,Zindex]=intersect(vertcat(dataZ.ID),ABC_inter);
@@ -18,6 +19,7 @@ ndataN=dataN(Nindex);
 
 %% Keep events with S-P below the given threshold
 j=1;
+
 for i=1:length(ndataZ)
     temp=ndataN(i).T0-ndataZ(i).A;
    if  temp>min_sp
@@ -25,11 +27,23 @@ for i=1:length(ndataZ)
        j=j+1;
    end
 end
-
+if ~isempty(ind)
 %Final filtering of data
 filtDataZ=ndataZ(ind);
 
 filtDataE=ndataE(ind);
 
 filtDataN=ndataN(ind);
-end
+
+else 
+    filtDataZ = [];
+    filtDataE = [];
+    filtDataN = [];
+end % end if for ind 
+
+else 
+    filtDataZ = [];
+    filtDataE = [];
+    filtDataN = [];
+end % end if for ABC_inter
+end % end of function 
