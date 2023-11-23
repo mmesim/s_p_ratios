@@ -2,14 +2,14 @@ function   [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filt
 %function to calculate S/P ratios
 %Similar to Yang et al., 2012 [BSSA] Southern California
 
-%Prealllcoate memory 
+%Preallocate memory 
 Pamp=NaN(length(filtDataZ),1);
 Samp=Pamp; Namp=Pamp; SP=Pamp; SNR=Pamp;
 
 if ~isempty(filtDataZ) && ~isempty(filtDataZ) && ~isempty(filtDataZ)
 
 %% Calculate amplitudes
-for i=1:length(filtDataZ)
+parfor i=1:length(filtDataZ)
 % 00. Extract vector from structure
 yZ=filtDataZ(i).wav_proc;    
 yE=filtDataE(i).wav_proc; 
@@ -20,7 +20,7 @@ Pstart=round((filtDataZ(i).A-P_Bpick_win)./filtDataZ(1).DELTA); %window before P
 Sstart=round((filtDataE(i).T0-S_Bpick_win)./filtDataE(1).DELTA); %window before S pick
 
 Pstop=round((filtDataZ(i).A+P_Apick_win)./filtDataZ(1).DELTA); %window after P pick
-Sstop=round((filtDataE(i).T0+S_Apick_win)./filtDataZ(1).DELTA); %window after S pick;
+Sstop=round((filtDataE(i).T0+S_Apick_win)./filtDataE(1).DELTA); %window after S pick;
 
 
 Nstart=Pstart-(Noise_win/filtDataZ(1).DELTA); %window after pick;

@@ -2,7 +2,7 @@ function stations=my_setup(workers,mydata)
 %Setup for waveform cc
 %Start parallel pool - Set paths - List stations
 
-%parpool('local',workers); %Start parallel pool
+parpool('local',workers); %Start parallel pool
 %list stations
 data_path=sprintf('%s/*',mydata);
 listing=dir(data_path);
