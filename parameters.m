@@ -9,20 +9,21 @@ mydata='example';
 %--------------------------------------------------------------------------
 % Parallel settings
 workers=2;                 %Set number of cores to work on a local machine
-%-------------- Filtering parameters --------------------------------------
+
+%-------------- Pre-processing parameters ---------------------------------
+sps=100;                   %target sampling rate
 type='bandpass';           %'low', 'high', 'bandpass'
 %co=1;                     %low or high corner frequency (high or low pass)
-co=[1.5;10];                %low-high corner frequency for bandpass
+co=[1.0;10];                %low-high corner frequency for bandpass
 %--------------------------------------------------------------------------
-%---------------- Correlation Parameters ----------------------------------
-P_Bpick_win=0.1;           %Window before P arrival [in sec] 
-S_Bpick_win=0.1;           %Window before S arrival [in sec]  
-P_Apick_win=0.9;           %Window after P arrival [in sec]
-S_Apick_win=1.9;           %Window after S arrival [in sec] 
+%---------------- Signal Window  ----------------------------------
+P_Bpick_win=0.5;           %Window before P arrival [in sec] 
+S_Bpick_win=0.5;           %Window before S arrival [in sec]  
+P_Apick_win=1.0;           %Window after P arrival [in sec]
+S_Apick_win=1.0;           %Window after S arrival [in sec] 
 %--------------------------------------------------------------------------
-%----------------- Output Files parameters --------------------------------
-cc_thres=0.8;              %Minimum CC value for both P and S [0-1]
-obs_thres=0;               %Minimum observations for each event pair
-fhypodd='hypoDD.cc';       %Filename for hypoDD cc file
-fgrowclust='growclust.cc'; %Filename for Growclust  cc file
+Noise_win=1.5;             %Window for Noise [in sec]
+%------------------Selection parameters -----------------------------------
+min_sn=3;                  %Minimum SNR  [no units] 
+min_sp=2;                  %Minimum S-P time [in sec]  
 %--------------------------------------------------------------------------
