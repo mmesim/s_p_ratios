@@ -18,15 +18,14 @@ ndataE=dataE(Eindex);
 ndataN=dataN(Nindex);
 
 %% Keep events with S-P below the given threshold
-j=1;
+Ptime=[ndataZ.A]';
+Stime=[ndataE.T0]';
 
-for i=1:length(ndataZ)
-    temp=ndataN(i).T0-ndataZ(i).A;
-   if  temp>min_sp
-       ind(j,1)=i;
-       j=j+1;
-   end
-end
+SPdiff=Stime-Ptime;
+
+ind=find(SPdiff>min_sp);
+
+
 if ~isempty(ind)
 %Final filtering of data
 filtDataZ=ndataZ(ind);
