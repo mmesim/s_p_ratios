@@ -9,18 +9,19 @@ parfor i=1:length(y_proc)
 yr=my_detrend(mystructure(i).waveform,1);
 %02. remove mean
 yrm=yr-mean(yr);
-       
+     
 %03. Resample if needed
-if sps ~= round(1/mystructure(1).DELTA)
-yrmr=resample(yrm,round(1/mystructure(1).DELTA),sps);
+if sps ~= round(1/mystructure(i).DELTA)
+yrmr=resample(yrm,round(1/mystructure(i).DELTA),sps);
+
 %04. filter
-yrmrf=my_filter(yrmr,type,mystructure(1).DELTA,co);
+yrmrf=my_filter(yrmr,type,mystructure(i).DELTA,co);
 
 y_proc{i,1}=yrmrf;
 
 else
 %04. filter
-yrmf=my_filter(yrm,type,mystructure(1).DELTA,co);
+yrmf=my_filter(yrm,type,mystructure(i).DELTA,co);
 y_proc{i,1}=yrmf;          
            
 end % end of resampling if

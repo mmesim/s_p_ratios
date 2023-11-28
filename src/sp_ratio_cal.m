@@ -1,4 +1,4 @@
-function   [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filtDataN,P_Apick_win,P_Bpick_win,S_Apick_win,S_Bpick_win,Noise_win)
+function   [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filtDataN,P_Apick_win,P_Bpick_win,S_Apick_win,S_Bpick_win,Noise_win,sps)
 %function to calculate S/P ratios
 %Similar to Yang et al., 2012 [BSSA] Southern California
 
@@ -9,22 +9,42 @@ Samp=Pamp; Namp=Pamp; SP=Pamp; SNR=Pamp;
 if ~isempty(filtDataZ) && ~isempty(filtDataZ) && ~isempty(filtDataZ)
 
 %% Calculate amplitudes
-parfor i=1:length(filtDataZ)
+for i=1:length(filtDataZ)
 % 00. Extract vector from structure
 yZ=filtDataZ(i).wav_proc;    
 yE=filtDataE(i).wav_proc; 
 yN=filtDataN(i).wav_proc; 
 
 % 01. Define start and Stop
-Pstart=round((filtDataZ(i).A-P_Bpick_win)./filtDataZ(1).DELTA); %window before P pick
-Sstart=round((filtDataE(i).T0-S_Bpick_win)./filtDataE(1).DELTA); %window before S pick
+% Also here we need to check the P window bacause the source reciever
+% distance is small
+Pstart=round((filtDataZ(i).A-P_Bpick_win)./(1/sps)); %window before P pick
+Sstart=round((filtDataE(i).T0-S_Bpick_win)./(1/sps)); %window before S pick
 
-Pstop=round((filtDataZ(i).A+P_Apick_win)./filtDataZ(1).DELTA); %window after P pick
-Sstop=round((filtDataE(i).T0+S_Apick_win)./filtDataE(1).DELTA); %window after S pick;
+if Pstart<0
+    Pstart=1;
+end
 
 
-Nstart=Pstart-(Noise_win/filtDataZ(1).DELTA); %window after pick;
+Pstop=round((filtDataZ(i).A+P_Apick_win)./(1/sps)); %window after P pick
+Sstop=round((filtDataE(i).T0+S_Apick_win)./(1/sps)); %window after S pick;
+
+% Here we need to be careful because sometimes there are not enough data
+% before the P pick due to station proximity -- All waveforms are cut at
+% the origin time
+% Introducing If statement that when the noise window is before the origin
+% time then Noise is Amplitude is equal to 1.
+Nstart=Pstart-(Noise_win/(1/sps)); %window after pick;
 Nstop=Pstart; %Noise window stops when P window starts 
+
+%Now check noise window
+if Nstart>0
+
+    Namp(i,1)=my_amplitudes(fix(Nstart),fix(Nstop),yZ,yE,yN);
+
+else
+    Namp(i,1)=1;
+end
 
 
 %Compute Amplitudes
@@ -32,8 +52,6 @@ Nstop=Pstart; %Noise window stops when P window starts
 Pamp(i,1)=my_amplitudes(fix(Pstart),fix(Pstop),yZ,yE,yN);
 
 Samp(i,1)=my_amplitudes(fix(Sstart),fix(Sstop),yZ,yE,yN);
-
-Namp(i,1)=my_amplitudes(fix(Nstart),fix(Nstop),yZ,yE,yN);
 
 SNR(i,1)=Pamp(i,1)./Namp(i,1);
 
