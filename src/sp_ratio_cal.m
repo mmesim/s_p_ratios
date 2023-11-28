@@ -1,4 +1,4 @@
-function   [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filtDataN,P_Apick_win,P_Bpick_win,S_Apick_win,S_Bpick_win,Noise_win,sps)
+function   [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filtDataN,P_Apick_win,P_Bpick_win,S_Apick_win,S_Bpick_win,Noise_win)
 %function to calculate S/P ratios
 %Similar to Yang et al., 2012 [BSSA] Southern California
 
@@ -18,23 +18,23 @@ yN=filtDataN(i).wav_proc;
 % 01. Define start and Stop
 % Also here we need to check the P window bacause the source reciever
 % distance is small
-Pstart=round((filtDataZ(i).A-P_Bpick_win)./(1/sps)); %window before P pick
-Sstart=round((filtDataE(i).T0-S_Bpick_win)./(1/sps)); %window before S pick
+Pstart=round((filtDataZ(i).A-P_Bpick_win)./filtDataZ(i).DELTA); %window before P pick
+Sstart=round((filtDataE(i).T0-S_Bpick_win)./filtDataZ(i).DELTA); %window before S pick
 
 if Pstart<0
     Pstart=1;
 end
 
 
-Pstop=round((filtDataZ(i).A+P_Apick_win)./(1/sps)); %window after P pick
-Sstop=round((filtDataE(i).T0+S_Apick_win)./(1/sps)); %window after S pick;
+Pstop=round((filtDataZ(i).A+P_Apick_win)./filtDataZ(i).DELTA); %window after P pick
+Sstop=round((filtDataE(i).T0+S_Apick_win)./filtDataZ(i).DELTA); %window after S pick;
 
 % Here we need to be careful because sometimes there are not enough data
 % before the P pick due to station proximity -- All waveforms are cut at
 % the origin time
 % Introducing If statement that when the noise window is before the origin
 % time then Noise is Amplitude is equal to 1.
-Nstart=Pstart-(Noise_win/(1/sps)); %window after pick;
+Nstart=Pstart-(Noise_win./filtDataZ(i).DELTA); %window after pick;
 Nstop=Pstart; %Noise window stops when P window starts 
 
 %Now check noise window

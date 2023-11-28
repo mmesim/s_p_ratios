@@ -1,4 +1,4 @@
-function [filtDataZ,filtDataE,filtDataN]=my_preprocessing(filtDataZ,filtDataE,filtDataN,co,type,sps)
+function [filtDataZ,filtDataE,filtDataN]=my_preprocessing(filtDataZ,filtDataE,filtDataN,co,type)
 
 %Preprocessing
 %Check if structure is not empty and then 
@@ -8,9 +8,9 @@ function [filtDataZ,filtDataE,filtDataN]=my_preprocessing(filtDataZ,filtDataE,fi
 %(4) Filter
 
 if ~isempty(filtDataZ) && ~isempty(filtDataZ) && ~isempty(filtDataZ)
-    yZ_proc=do_preprocessing(filtDataZ,co,type,sps);
-    yE_proc=do_preprocessing(filtDataE,co,type,sps);
-    yN_proc=do_preprocessing(filtDataN,co,type,sps);    
+    yZ_proc=do_preprocessing(filtDataZ,co,type);
+    yE_proc=do_preprocessing(filtDataE,co,type);
+    yN_proc=do_preprocessing(filtDataN,co,type);    
 
     [filtDataZ.wav_proc] = yZ_proc{:};
     [filtDataE.wav_proc] = yE_proc{:};
