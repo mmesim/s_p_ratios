@@ -29,8 +29,7 @@ data_path=sprintf('%s/%s/*',mydata,station);
 listing=dir(data_path);
 listing(ismember( {listing.name}, {'.', '..'})) = [];  %remove . and ..
 %--------------------------------------------------
-j=1;jj=1;jjj=1;
-for i=1:length(listing)
+parfor i=1:length(listing)
 filename=sprintf('%s/%s/%s',mydata,station,listing(i).name);
 [D,~,header]=rdsac(filename);    
 splitfilename=strsplit(listing(i).name,'.');
@@ -42,34 +41,36 @@ splitfilename=strsplit(listing(i).name,'.');
     if splitfilename{1,4}(3) == 'Z'   
     %------- add headers to a signle structure --------
     %Upadated to keep specific entries
-    dataZ(j)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'A', header.A, 'EVLA', header.EVLA, ...
+    dataZ(i)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'A', header.A, 'EVLA', header.EVLA, ...
                    'EVLO',header.EVLO, 'EVDP', header.EVDP , ...
                     'MAG',header.MAG, 'NZYEAR',header.NZYEAR, 'NZJDAY',header.NZJDAY, ...
                     'KSTNM', header.KSTNM, 'KCMPNM', header.KCMPNM , 'KNETWK', header.KNETWK );
     
-    j=j+1;
     elseif splitfilename{1,4}(3) == 'E' || splitfilename{1,4}(3) == '1'
     %------- add headers to a signle structure --------
     %Upadated to keep specific entries
-    dataE(jj)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'T0', header.T0, 'EVLA', header.EVLA, ...
+    dataE(i)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'T0', header.T0, 'EVLA', header.EVLA, ...
                    'EVLO',header.EVLO, 'EVDP', header.EVDP , ...
                     'MAG',header.MAG, 'NZYEAR',header.NZYEAR, 'NZJDAY',header.NZJDAY, ...
                     'KSTNM', header.KSTNM, 'KCMPNM', header.KCMPNM , 'KNETWK', header.KNETWK );
-    jj=jj+1;
+                
      elseif splitfilename{1,4}(3) == 'N' || splitfilename{1,4}(3) == '2' 
     %------- add headers to a signle structure --------
     %Upadated to keep specific entries
-    dataN(jjj)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'T0', header.T0, 'EVLA', header.EVLA, ...
+    dataN(i)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'T0', header.T0, 'EVLA', header.EVLA, ...
                    'EVLO',header.EVLO, 'EVDP', header.EVDP , ...
                     'MAG',header.MAG, 'NZYEAR',header.NZYEAR, 'NZJDAY',header.NZJDAY, ...
                     'KSTNM', header.KSTNM, 'KCMPNM', header.KCMPNM , 'KNETWK', header.KNETWK );
     
-    jjj=jjj+1;  
     end
     end
 
 end
 
+%Remove empty fields
+dataZ = dataZ(~cellfun(@isempty,{dataZ.ID}));
+dataE = dataE(~cellfun(@isempty,{dataE.ID}));
+dataN = dataN(~cellfun(@isempty,{dataN.ID}));
 
 %--------------------------------------------------
 end
