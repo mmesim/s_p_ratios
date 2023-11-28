@@ -38,7 +38,7 @@ if Nstart>0 && Nstop<length(filtDataE(i).waveform) && Nstart<length(filtDataE(i)
     Namp(i,1)=my_amplitudes(round(Nstart),round(Nstop),yZ,yE,yN);
 
 else 
-    Namp(i,1)=1;
+    Namp(i,1)=NaN;
 end
 
 %Now check P  windows
@@ -48,7 +48,7 @@ if Pstart<=0
     
 elseif Pstart>length(filtDataE(i).waveform) || Pstop>length(filtDataE(i).waveform)
     
-    Pamp(i,1)=-9;
+    Pamp(i,1)=NaN;
     
 elseif     Pstart<length(filtDataE(i).waveform) && Pstop<length(filtDataE(i).waveform)
     Pamp(i,1)=my_amplitudes(round(Pstart),round(Pstop),yZ,yE,yN);
@@ -58,7 +58,7 @@ end
 %Now check S windows
 if  Sstart>length(filtDataE(i).waveform) || Sstop>length(filtDataE(i).waveform)
     
-    Samp(i,1)=-9;
+    Samp(i,1)=NaN;
     
 elseif Sstart<length(filtDataE(i).waveform) && Sstop<length(filtDataE(i).waveform)
     
