@@ -1,4 +1,4 @@
-function   [dataZ,dataE,dataN]=my_loadfiles(mydata,station)
+function   [dataZ,dataE,dataN]=my_loadfiles(mydata,station,wlen)
 %list all sac files in "STATION"/ directory
 %and loop through them to read sac files
 
@@ -36,9 +36,10 @@ filename=sprintf('%s/%s/%s',mydata,station,listing(i).name);
 splitfilename=strsplit(listing(i).name,'.');
 %Comment --- The filename should be something like 
 %         ID NETWORK STATION CHANNEL SAC
-%         eg. 001.UU.FORU.HHZ.sac
+%         eg. 001.CH.BTRF.HHZ.sac
 %--------------------------------------------------
-    if splitfilename{1,4}(3) == 'Z'    
+    if length(D)>=round(wlen/header.DELTA) 
+    if splitfilename{1,4}(3) == 'Z'   
     %------- add headers to a signle structure --------
     %Upadated to keep specific entries
     dataZ(j)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'A', header.A, 'EVLA', header.EVLA, ...
@@ -47,7 +48,7 @@ splitfilename=strsplit(listing(i).name,'.');
                     'KSTNM', header.KSTNM, 'KCMPNM', header.KCMPNM , 'KNETWK', header.KNETWK );
     
     j=j+1;
-    elseif splitfilename{1,4}(3) == 'E' || splitfilename{1,4}(3) == '1' 
+    elseif splitfilename{1,4}(3) == 'E' || splitfilename{1,4}(3) == '1'
     %------- add headers to a signle structure --------
     %Upadated to keep specific entries
     dataE(jj)=struct('ID',str2double(splitfilename{1,1}),'waveform',double(D),'DELTA',header.DELTA, 'T0', header.T0, 'EVLA', header.EVLA, ...
@@ -65,8 +66,9 @@ splitfilename=strsplit(listing(i).name,'.');
     
     jjj=jjj+1;  
     end
-end
+    end
 
+end
 
 
 %--------------------------------------------------
