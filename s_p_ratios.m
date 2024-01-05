@@ -13,7 +13,7 @@ addpath(genpath(pdir)); %add all *.m scripts to path
 stations=my_setup(workers,mydata);
 %--------------------------------------------------------------------------
 %% 01. Load data (Sac files)
-for i=5:length(stations) %loop through stations
+for i=1:length(stations) %loop through stations
 disp(stations(i))    
 disp('Loading files..')
 [dataZ,dataE,dataN]=my_loadfiles(mydata,stations{i,1},wlen);
@@ -34,6 +34,7 @@ disp('Preprocessing....')
 disp('Calculate Amplitudes...')
 [filtDataZ,filtDataE,filtDataN]=sp_ratio_cal(filtDataZ,filtDataE,filtDataN,P_Apick_win,P_Bpick_win,S_Apick_win,S_Bpick_win,Noise_win);
 
+if ~isempty(filtDataZ) && ~isempty(filtDataZ) && ~isempty(filtDataZ)
 %% 05. Save structure
 %Remove fileds that contain waveforms
 fields={'waveform','wav_proc'};
@@ -57,7 +58,13 @@ filtDataN=rmfield(filtDataN,fields);
 % save remaining structures
 filename=sprintf('%s.mat',stations{i,1});
 save(filename)
- 
+
+end
+
+%Clean a bit 
+clearvars -except i co min_sn min_sp mydata Noise_win P_Apick_win P_Bpick_win pdir S_Apick_win S_Bpick_win stations type wlen workers
+
+
 end
 
 %% 06. Shutdown parallel pool
