@@ -47,7 +47,7 @@ ids=vertcat(mystruct.ID);
 [N,edges] = histcounts(ids,min(ids):max(ids));
 
 %now find events with minimum Nobs
-ind=find(N==thres);
+ind=find(N>=thres);
 
 %% Create output 
 fout=fopen('output.txt','w');
