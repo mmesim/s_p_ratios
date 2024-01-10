@@ -15,7 +15,7 @@ clear;clc;close all
 %----------------------------------------------------------------------
 %% Parameters
 %path to mat files
-mydata='/data/tmp/output';
+mydata='/scratch/mesimeri/output';
 %Minimum Number of observations per event
 thres=10;
 
@@ -24,7 +24,7 @@ data_path=sprintf('%s/*',mydata);
 listing=dir(data_path);
 listing(ismember( {listing.name}, {'.', '..'})) = [];  %remove . and ..
 
-for i=2:length(listing)
+for i=1:length(listing)
     
 filename=sprintf('%s/%s',mydata,listing(i).name);
 
@@ -50,10 +50,27 @@ ids=vertcat(mystruct.ID);
 ind=find(N>=thres);
 
 %% Create output 
-fout=fopen('output.txt','w');
-for i=1%:length(ind)
-        %Here write the header
+
+for i=1:length(ind)
+        %Find Stations with the same ID
         index=find(ids==edges(ind(i)));
+        %Event Magnitude
+        mag=fix(abs(mystruct(index(1)).MAG));
+        mmag=fix(abs(mystruct(index(1)).MAG-mag)*1000);
+        %Event Depth
+        depth=fix(mystruct(index(1)).EVDP);
+        ddepth=fix(abs(mystruct(index(1)).EVDP-depth)*100);
+        
+        %Create a file for each event
+        %Filename should much Fede's convention
+        %i.e,
+        %007npha_M-0p000_Z01p65km_id100734819.amp
+        %Number of phases  - magnitude - event depth  - event ID
+        filename=sprintf('%03dnpha_M-%dp%03d_Z%02dp%02dkm_id%d.amp',...
+                  length(index), mag, mmag, depth ,ddepth ,edges(ind(i)));
+              
+        fout=fopen(filename,'w');
+        %Here write the header
         fprintf(fout,'%d %d \n',edges(ind(i)),length(index));
     
         for k=1:length(index)
@@ -70,7 +87,7 @@ for i=1%:length(ind)
             
         end
     
-     
+        fclose(fout);
 end
 
-fclose(fout);
+
