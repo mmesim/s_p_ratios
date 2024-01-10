@@ -52,8 +52,7 @@ ind=find(N>=thres);
 %% Create output 
 
 for i=1:length(ind)
-        %Find Stathtop
-        ions with the same ID
+        %Find Stations with the same ID
         index=find(ids==edges(ind(i)));
         %Event Magnitude
         mag=fix(abs(mystruct(index(1)).MAG));
