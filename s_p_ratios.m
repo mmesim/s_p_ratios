@@ -13,7 +13,7 @@ addpath(genpath(pdir)); %add all *.m scripts to path
 stations=my_setup(workers,mydata);
 %--------------------------------------------------------------------------
 %% 01. Load data (Sac files)
-for i=1:length(stations) %loop through stations
+for i=108%:length(stations) %loop through stations
 disp(stations(i))    
 disp('Loading files..')
 [dataZ,dataE,dataN]=my_loadfiles(mydata,stations{i,1},wlen);
@@ -58,6 +58,8 @@ filtDataN=rmfield(filtDataN,fields);
 % save remaining structures
 filename=sprintf('%s.mat',stations{i,1});
 save(filename)
+
+!mv *.mat /scratch/mesimeri/output/
 
 end
 
