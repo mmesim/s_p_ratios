@@ -1,7 +1,7 @@
-%Parameter file for waveform cross correlation code                       %
+%Parameter file for S_P ratio calculation                                 %
 %                                                                         % 
-% ------------------  M.Mesimeri 04/2020  ---------------------------------
-%               University of Utah seismograph Stations                   %
+% ------------------  M.Mesimeri 10-11/2023  ---------------------------------
+%               Swiss Seismological Service | Bedretto Lab                %
 %                      maria.mesimeri@sed.ethz.ch                         %
 %--------------------------------------------------------------------------
 %path to waveforms
@@ -16,7 +16,7 @@ type='bandpass';           %'low', 'high', 'bandpass'
 co=[1.0;10];                %low-high corner frequency for bandpass
 %--------------------------------------------------------------------------
 %---------------- Signal Window  ----------------------------------
-P_Bpick_win=0.01;           %Window before P arrival [in sec] 
+P_Bpick_win=0.1;           %Window before P arrival [in sec] 
 S_Bpick_win=0.5;           %Window before S arrival [in sec]  
 P_Apick_win=0.9;           %Window after P arrival [in sec]
 S_Apick_win=1.0;           %Window after S arrival [in sec] 

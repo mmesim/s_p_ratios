@@ -52,7 +52,8 @@ ind=find(N>=thres);
 %% Create output 
 
 for i=1:length(ind)
-        %Find Stations with the same ID
+        %Find Stathtop
+        ions with the same ID
         index=find(ids==edges(ind(i)));
         %Event Magnitude
         mag=fix(abs(mystruct(index(1)).MAG));
@@ -88,6 +89,7 @@ for i=1:length(ind)
         end
     
         fclose(fout);
+	!mv *.amp /scratch/mesimeri/results_indi
 end
 
 
